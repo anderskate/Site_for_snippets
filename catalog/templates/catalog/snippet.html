@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block script %} 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock script %}
+
+{% block content %}
+    <div class="main">
+        <h2>{{ snippet.title }}</h2>
+        {% for code_part in code_parts %}
+            <pre class="snippet_code"><code>{{ code_part.code }}</code></pre>
+        {% endfor %}
+    </div>
+{% endblock %}

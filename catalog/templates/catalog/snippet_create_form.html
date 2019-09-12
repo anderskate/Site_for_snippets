@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block script %}
+  <script type="text/javascript"> 
+    $(function() { 
+        $('.form-container').formset();
+    }) 
+  </script>
+{% endblock script %}
+
+{% block content %}
+  <div class="container">
+    <div class="form-style-5">
+      <form action="{% url 'snippet_create_url' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      {% for field in snippet_form %}
+          {% if field.errors %}
+            {{ field.errors }}
+          {% endif %}
+      {% endfor %}
+
+      <legend><span class="number">#</span>{{ snippet_form.title.label }}</legend>
+      {{ snippet_form.title }}
+
+      <div class="field_choose_lang">
+        <legend>{{ snippet_form.language.label }}</legend>
+        {{ snippet_form.language }}
+      </div>
+
+      <div class="field_on_private">
+        <legend>{{ snippet_form.status.label }}</legend>
+        {{ snippet_form.status }}
+      </div>
+
+      <div class="clear"><legend><span class="number">&</span></legend></div>
+
+      {{ code_form.management_form }}
+      <div class="form-container">
+          {% for form in code_form %}
+            {{ form.as_p }}
+          {% endfor %}
+      </div>
+
+      <button type="submit">Создать сниппет</button>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

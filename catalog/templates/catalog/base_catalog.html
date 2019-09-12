@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="skill_bar">
+          <h2>Количество сниппетов с языками</h2>
+
+          <ul class="border">
+            {% for key,value in language_statistics.items %}
+                <li>{{ key }}: <b>{{ value }}</b></li>
+            {% endfor %}
+          </ul>
+    </div>
+    <div class="main">
+      
+     {% for snippet in page_object.object_list %}
+          {% if snippet.status == 'n' %}
+              <h2> {{ snippet.title }}</h2>
+              <p class="text-gray">Дата публикации: <b>{{ snippet.date_pub }}</b> | Файлов: <b>{{ snippet.get_number_of_files }}</b></p>
+              <pre>{{ snippet.get_code_preview }}</pre>
+              <a class="butt" href="{% url 'snippet_datail_url' snippet.id %}">Читать</a>
+          {% endif %}
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+  <div class="pagination">
+    <a href="{{ prev_url }}" class="{% if not prev_url %}disabled{% endif %}">&laquo;</a>
+
+    {% for n in page_object.paginator.page_range %}
+      {% if page_object.number == n %}
+          <a class="active" href="?page={{ n }}">{{ n }}</a>
+      {% elif n > page_object.number|add:-3 and n < page_object.number|add:3 %}
+          <a href="?page={{ n }}">{{ n }}</a>
+      {% endif %}
+      
+    {% endfor %}
+
+    <a href="{{ next_url }}" class="{% if not prev_url %}disabled{% endif %}">&raquo;</a>
+  </div>
+{% endblock content %}
