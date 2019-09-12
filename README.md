@@ -8,6 +8,9 @@
 - Скачайте код
 - Установите зависимости командой `pip install -r requirements.txt`
 - Запустите сервер командой `python3 manage.py runserver`
+- Сделайте миграцию базы данных
+`python3 manage.py makemigrations`
+`python3 manage.py migrate`
 
 ### Переменные окружения
 
