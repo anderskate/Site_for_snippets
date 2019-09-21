@@ -4,7 +4,7 @@ from .forms import SnippetForm, CodeForm
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.views.generic import View
-from .tools import get_filename_from_cd, get_data_by_link
+from .tools import get_filename_from_cd, get_data_by_link, get_filename
 
 from .forms import CodeFormset
 
@@ -84,8 +84,9 @@ class Snippet_Create(View):
                 bound_snippet_form.cleaned_data['language'] = extension_file
             elif request.POST['language'] == '' and 'http' in last_post_data_element:
                 link = last_post_data_element
-                file_name = get_data_by_link(link).headers.get('content-disposition')
-                extension_file = get_filename_from_cd(file_name).split('.')[1]
+                link_data = get_data_by_link(link)
+                file_name = get_filename(link_data)
+                extension_file = file_name.split('.')[1]
                 bound_snippet_form.cleaned_data['language'] = extension_file
 
             new_snippet = bound_snippet_form.save()
