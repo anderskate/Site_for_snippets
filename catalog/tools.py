@@ -1,6 +1,7 @@
 from .models import Snippet
 import re
 import requests
+import rfc6266_parser as rfc6266
 
 
 def check_file_extension(file_name):
@@ -14,6 +15,17 @@ def check_file_extension(file_name):
         return True
 
     return False
+
+def get_filename(response):
+    header = response.headers
+    content_type = header.get('content-type')
+
+    if 'text/plain' in content_type.lower():
+        filename = rfc6266.parse_requests_response(response).filename_unsafe
+    else:
+        filename = get_filename_from_cd(header.get('content-disposition'))
+
+    return filename
 
 
 def get_filename_from_cd(cd):
