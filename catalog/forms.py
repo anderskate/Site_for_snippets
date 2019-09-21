@@ -4,7 +4,8 @@ from django.core.exceptions import ValidationError
 from .tools import (
     get_filename_from_cd, 
     check_file_extension,
-    get_data_by_link
+    get_data_by_link,
+    get_filename
 )
 
 from django.forms import formset_factory
@@ -56,6 +57,7 @@ class CodeForm(forms.Form):
             return file_data
 
 
+
     def clean_link_to_file(self):
         if self.cleaned_data['link_to_file'] != '':
             new_link = self.cleaned_data['link_to_file']
@@ -69,6 +71,7 @@ class CodeForm(forms.Form):
             header = data.headers
 
             content_type = header.get('content-type')
+
             if 'text/html' in content_type.lower():
                 raise ValidationError('Данная ссылка не для загрузки файла')
 
@@ -77,7 +80,8 @@ class CodeForm(forms.Form):
             if int(content_length) > max_size:
                 raise ValidationError('Большой размер файла')
 
-            filename = get_filename_from_cd(header.get('content-disposition'))
+            filename = get_filename(data)
+
             if not check_file_extension(filename):
                 raise ValidationError('Данное расширение файла не поддерживается')
 
@@ -108,4 +112,3 @@ class CodeRequiredFormSet(BaseFormSet):
 
 
 CodeFormset = formset_factory(CodeForm, formset=CodeRequiredFormSet, extra=1, max_num=5)
-           
