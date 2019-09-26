@@ -10,7 +10,8 @@ def check_file_extension(file_name):
         extensions.append(i[0])
     if not '.' in file_name:
         return False
-    extension_file = file_name.split('.')[1]
+    extension_file = file_name.split('.')[-1]
+    print(extension_file)
     if extension_file in extensions:
         return True
 
