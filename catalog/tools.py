@@ -1,4 +1,4 @@
-from .models import Snippet
+from .models import PieceOfCode
 import re
 import requests
 import rfc6266_parser as rfc6266
@@ -6,7 +6,7 @@ import rfc6266_parser as rfc6266
 
 def check_file_extension(file_name):
     extensions = []
-    for i in Snippet.LANGUAGES:
+    for i in PieceOfCode.LANGUAGES:
         extensions.append(i[0])
     if not '.' in file_name:
         return False

@@ -19,19 +19,6 @@ class Snippet(models.Model):
         choices=PRIVATE_STATUS, 
         default='n',
     )
-    LANGUAGES = (
-        ('py', 'Python'),
-        ('js', 'Javascript'),
-        ('php', 'PHP'),
-        ('java', 'Java'),
-        ('swift', 'Swift'),
-        )
-    language = models.CharField(
-        'язык программирования', 
-        max_length=5, 
-        choices=LANGUAGES, 
-        blank=True,
-    )
 
     class Meta:
         ordering = ['-date_pub']
@@ -58,6 +45,20 @@ class Snippet(models.Model):
 
 class PieceOfCode(models.Model):
     snippet = models.ForeignKey(Snippet, verbose_name='сниппет', on_delete=models.CASCADE)
+    LANGUAGES = (
+        (None, '------'),
+        ('py', 'Python'),
+        ('js', 'Javascript'),
+        ('php', 'PHP'),
+        ('java', 'Java'),
+        ('swift', 'Swift'),
+        )
+    language = models.CharField(
+        'язык программирования', 
+        max_length=5, 
+        choices=LANGUAGES, 
+        blank=True,
+    )
     code = models.TextField('код')
 
     def __str__(self):

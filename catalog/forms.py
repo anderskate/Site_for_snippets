@@ -14,18 +14,18 @@ from django.forms.formsets import BaseFormSet
 class SnippetForm(forms.ModelForm):
     class Meta:
         model = Snippet
-        fields = ('title', 'status', 'language')
+        fields = ('title', 'status')
 
     def save(self):
         new_snippet = Snippet.objects.create(
             title = self.cleaned_data['title'],
             status = self.cleaned_data['status'],
-            language = self.cleaned_data['language'],
         )
         return new_snippet
 
 
 class CodeForm(forms.Form):
+    language = forms.TypedChoiceField(label='Язык', choices=PieceOfCode.LANGUAGES, required=False)
     code = forms.CharField(label='Код', widget=forms.Textarea, required=False)
     file = forms.FileField(label='Файл', required=False)
     link_to_file = forms.CharField(label='Ссылка на файл', required=False)
@@ -33,6 +33,7 @@ class CodeForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
+        language = cleaned_data.get('language')
         code = cleaned_data.get('code')
         file = cleaned_data.get('file')
         link_to_file = cleaned_data.get('link_to_file')
@@ -97,8 +98,11 @@ class CodeForm(forms.Form):
         elif self.cleaned_data['link_to_file'] != None:
             code = self.cleaned_data['link_to_file']
 
+        language = self.cleaned_data['language']
+
         new_code = PieceOfCode.objects.create(
             snippet = new_snippet,
+            language = language,
             code = code,
         )
 

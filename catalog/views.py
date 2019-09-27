@@ -27,14 +27,17 @@ def snippets_list(request):
     else:
         next_url = ''
 
-    languages_in_snippets = snippets.values('language')
-    languages_in_snippets_formating = [i['language'] for i in languages_in_snippets]
+
+    languages_in_pieces_of_code = PieceOfCode.objects.all().values('language')
+
+
+    languages_in_codes_formating = [i['language'] for i in languages_in_pieces_of_code]
     language_statistics = {
-        'Python': languages_in_snippets_formating.count('py'),
-        'Javascript': languages_in_snippets_formating.count('js'),
-        'PHP': languages_in_snippets_formating.count('php'),
-        'Java': languages_in_snippets_formating.count('java'),
-        'Swift': languages_in_snippets_formating.count('swift'),
+        'Python': languages_in_codes_formating.count('py'),
+        'Javascript': languages_in_codes_formating.count('js'),
+        'PHP': languages_in_codes_formating.count('php'),
+        'Java': languages_in_codes_formating.count('java'),
+        'Swift': languages_in_codes_formating.count('swift'),
     }
 
     context = {
@@ -75,23 +78,23 @@ class Snippet_Create(View):
         bound_code_form = CodeFormset(request.POST, request.FILES)
 
         if bound_code_form.is_valid() and bound_snippet_form.is_valid():
-            
-            last_post_data_element = list(request.POST.values())[-1]
-
-            if request.POST['language'] == '' and len(request.FILES) > 0:
-                uploaded_file = list(request.FILES.values())[0]
-                extension_file = uploaded_file.name.split('.')[1]
-                bound_snippet_form.cleaned_data['language'] = extension_file
-            elif request.POST['language'] == '' and 'http' in last_post_data_element:
-                link = last_post_data_element
-                link_data = get_data_by_link(link)
-                file_name = get_filename(link_data)
-                extension_file = file_name.split('.')[1]
-                bound_snippet_form.cleaned_data['language'] = extension_file
 
             new_snippet = bound_snippet_form.save()
 
             for form in bound_code_form:
+                last_post_data_element = list(request.POST.values())[-1]
+
+                if form.cleaned_data['language'] == '' and len(request.FILES) > 0:
+                    uploaded_file = list(request.FILES.values())[0]
+                    extension_file = uploaded_file.name.split('.')[1]
+                    form.cleaned_data['language'] = extension_file
+                elif form.cleaned_data['language'] == '' and 'http' in last_post_data_element:
+                    link = last_post_data_element
+                    link_data = get_data_by_link(link)
+                    file_name = get_filename(link_data)
+                    extension_file = file_name.split('.')[1]
+                    form.cleaned_data['language'] = extension_file
+
                 form.save(new_snippet)
             return redirect(new_snippet)
 
@@ -100,4 +103,3 @@ class Snippet_Create(View):
             'catalog/snippet_create_form.html',
             context={'snippet_form': bound_snippet_form, 'code_form': bound_code_form},
         )
-
