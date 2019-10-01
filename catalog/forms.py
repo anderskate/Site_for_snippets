@@ -91,20 +91,25 @@ class CodeForm(forms.Form):
         
 
     def save(self, new_snippet):
+        pieces_of_code = []
         if self.cleaned_data['code'] != '':
             code = self.cleaned_data['code']
-        elif self.cleaned_data['file'] != None:
+            pieces_of_code.append(code)
+        if self.cleaned_data['file'] != None:
             code = self.cleaned_data['file']
-        elif self.cleaned_data['link_to_file'] != None:
+            pieces_of_code.append(code)
+        if self.cleaned_data['link_to_file'] != None:
             code = self.cleaned_data['link_to_file']
+            pieces_of_code.append(code)
 
         language = self.cleaned_data['language']
 
-        new_code = PieceOfCode.objects.create(
-            snippet = new_snippet,
-            language = language,
-            code = code,
-        )
+        for code in pieces_of_code:
+            new_code = PieceOfCode.objects.create(
+                snippet = new_snippet,
+                language = language,
+                code = code,
+            )
 
 
 class CodeRequiredFormSet(BaseFormSet):
