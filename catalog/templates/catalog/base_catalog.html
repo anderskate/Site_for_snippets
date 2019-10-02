@@ -14,12 +14,10 @@
     <div class="main">
       
      {% for snippet in page_object.object_list %}
-          {% if snippet.status == 'n' %}
               <h2> {{ snippet.title }}</h2>
               <p class="text-gray">Дата публикации: <b>{{ snippet.date_pub }}</b> | Файлов: <b>{{ snippet.get_number_of_files }}</b></p>
               <pre>{{ snippet.get_code_preview }}</pre>
               <a class="butt" href="{% url 'snippet_datail_url' snippet.id %}">Читать</a>
-          {% endif %}
       {% endfor %}
 
     </div>

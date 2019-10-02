@@ -9,7 +9,7 @@ from .tools import get_filename_from_cd, get_data_by_link, get_filename
 from .forms import CodeFormset
 
 def snippets_list(request):
-    snippets = Snippet.objects.all()
+    snippets = Snippet.objects.filter(status='n')
     paginator = Paginator(snippets, 2)
 
     page_number = request.GET.get('page', 1)
