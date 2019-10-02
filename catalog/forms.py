@@ -69,14 +69,13 @@ class CodeForm(forms.Form):
             data = get_data_by_link(new_link)
             if data == False:
                 raise ValidationError('Нет доступа по данной ссылке')
-            header = data.headers
 
-            content_type = header.get('content-type')
+            content_type = data.headers['Content-Type']
 
             if 'text/html' in content_type.lower():
                 raise ValidationError('Данная ссылка не для загрузки файла')
 
-            content_length = header.get('content-length', None)
+            content_length = data.headers['Content-Length']
             max_size = 5000
             if int(content_length) > max_size:
                 raise ValidationError('Большой размер файла')

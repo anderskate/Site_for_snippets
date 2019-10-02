@@ -40,7 +40,7 @@ def get_filename_from_cd(cd):
 
 def get_data_by_link(link):
     try:
-        response = requests.get(link, allow_redirects=True)
+        response = requests.get(link, stream=True, allow_redirects=True)
         response.raise_for_status()
     except Exception:
         return False
