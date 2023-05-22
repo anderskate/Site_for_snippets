@@ -1,5 +1,5 @@
 Django==2.2.4
-requests==2.22.0
+requests==2.31.0
 psycopg2-binary==2.8.3
 python-dotenv==0.10.3
 rfc6266-parser==0.0.5.post2
